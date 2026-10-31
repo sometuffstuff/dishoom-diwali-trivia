@@ -614,20 +614,35 @@
 
     <script>
       // Fallback questions are used until a questions text file is loaded.
-      const DEFAULT_QUESTIONS = [
-        { question: "What is the capital of France?", answer: "Paris", difficulty: "Very easy" },
-        { question: "How many sides does a hexagon have?", answer: "Six", difficulty: "Very easy" },
-        { question: "Which planet is known as the Red Planet?", answer: "Mars", difficulty: "Easy" },
-        { question: "What is the chemical symbol for gold?", answer: "Au", difficulty: "Easy" },
-        { question: "How many players from one team are on the field in a standard football (soccer) match?", answer: "Eleven", difficulty: "Easy" },
-        { question: "What is the largest ocean on Earth?", answer: "The Pacific Ocean", difficulty: "Medium" },
-        { question: "Which element has the chemical symbol Ag?", answer: "Silver", difficulty: "Medium" },
-        { question: "What is the square root of 169?", answer: "13", difficulty: "Medium" },
-        { question: "Which scientist formulated the three laws of motion?", answer: "Isaac Newton", difficulty: "Hard" },
-        { question: "What is the atomic number of tungsten?", answer: "74", difficulty: "Hard" },
-        { question: "Which blood vessels carry blood away from the heart?", answer: "Arteries", difficulty: "Hard" },
-        { question: "What is the smallest bone in the human body?", answer: "The stapes", difficulty: "Very hard" },
-      ];
+const DEFAULT_QUESTIONS = [
+  { question: "What title is given to the festival of Diwali?", answer: "Festival of lights" },
+  { question: "What are the small oil lamps lit during Diwali called?", answer: "Diyas (or small oil lamps)" },
+  { question: "What goddess is celebrated during Diwali?", answer: "Lakshmi" },
+  { question: "Which festival features the famous Garba dance?", answer: "Navratri" },
+  { question: "Which sweet is traditionally offered during Ganesh Chaturthi?", answer: "Modak" },
+  { question: "Which Indian city is famous for its Blue City nickname?", answer: "Jodhpur" },
+  { question: "Which Indian festival features decorated elephants in Kerala?", answer: "Thrissur Pooram" },
+  { question: "What is the traditional Indian hanging decoration made of mango leaves called?", answer: "Toran" },
+  { question: "Who composed the Ramcharitmanas?", answer: "Tulsidas" },
+  { question: "What color of clothing is traditionally worn on Vasant Panchami?", answer: "Yellow" },
+  { question: "What is the name of Lakshmi's sister, associated with misfortune?", answer: "Alakshmi" },
+  { question: "Which festival commemorates the churning of the cosmic ocean (Samudra Manthan) by bathing in sacred rivers every 12 years?", answer: "Kumbh Mela" },
+  { question: "What is the name of the traditional boat race associated with Onam?", answer: "Vallam Kali" },
+  { question: "What is the name of the traditional harvest festival of Assam?", answer: "Bhogali" },
+  { question: "What is the name of the mountain lifted by Krishna?", answer: "Govardhan" },
+  { question: "What is the name of the sacred thread tied during Raksha Bandhan in Rajasthan?", answer: "Lumba" },
+  { question: "Which ancient kingdom did Lord Rama rule?", answer: "Kosala" },
+  { question: "In South India, what is the day preceding the main Diwali celebration, associated with Narakasura's defeat?", answer: "Narak Chaturdashi" },
+  { question: "What is the name of the intricate floor art traditionally made using colored powders, rice flour, or flower petals during Diwali?", answer: "Rangoli" },
+  { question: "Which historic city in Uttar Pradesh organizes a massive Deepotsav along the Saryu River?", answer: "Ayodhya" },
+  { question: "Which Jain Tirthankara attained Nirvana on Diwali?", answer: "Mahavira" },
+  { question: "Which city is traditionally associated with Krishna's defeat of Narakasura?", answer: "Pragjyotisha" },
+  { question: "Whose release or liberation do Sikhs commemorate on Diwali as Bandi Chhor Divas?", answer: "Guru Hargobind Sahib" },
+  { question: "What is the traditional Marathi name for the day after Diwali which marks the victory of King Bali?", answer: "Bali Pratipada (or Bali Padyami)" },
+  { question: "The day Ganesha began writing the Mahabharata or Krishna gave the Akshaya Patra to the Pandavas is known as what?", answer: "Akshaya Tritiya" },
+  { question: "What is the traditional name for gambling on Diwali night?", answer: "Dyuta" },
+  { question: "Which legendary warrior in the Mahabharata chose to wait on a bed of arrows for the Makar Sankranti period before passing away?", answer: "Bhishma Pitamah" }
+];
       let QUESTIONS = [...DEFAULT_QUESTIONS];
       let questionsFileName = "";
       let leaderboardFileName = "";
