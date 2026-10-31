@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trivia Time</title>
+    <style>
+      :root {
+        --bg: #101014;
+        --panel: #19171b;
+        --panel-2: #252027;
+        --text: #fff0dc;
+        --muted: #b9a7a0;
+        --accent: #f2bd20;
+        --green: #d8a84e;
+        --red: #c94b52;
+        --border: #493039;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        background: radial-gradient(ellipse at top, #32131b 0%, #191217 42%, var(--bg) 100%);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        border: 0;
+        transition:
+          transform 0.12s ease,
+          opacity 0.12s ease,
+          background 0.12s ease;
+      }
+      button:active {
+        transform: scale(0.98);
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.38;
+      }
+      .app {
+        width: min(1100px, 100%);
+        margin: 0 auto;
+        padding: 28px 20px 44px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #481018;
+        font-weight: 950;
+        font-size: 22px;
+      }
+      h1 {
+        font-size: clamp(22px, 4vw, 30px);
+        margin: 0;
+        letter-spacing: -0.04em;
+      }
+      .eyebrow {
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-size: 11px;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .header-badge {
+        border: 1px solid var(--border);
+        background: #21161d;
+        padding: 9px 13px;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 290px;
+        gap: 18px;
+        align-items: start;
+      }
+      .card {
+        background: rgba(25, 23, 27, 0.97);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 18px 60px #0007;
+      }
+      .card-inner {
+        padding: clamp(20px, 4vw, 34px);
+      }
+      .timer-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .timer-label {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.13em;
+        font-weight: 800;
+      }
+      .timer {
+        font-variant-numeric: tabular-nums;
+        font-size: clamp(38px, 7vw, 58px);
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 1;
+      }
+      .timer.warning {
+        color: var(--red);
+      }
+      .progress-wrap {
+        height: 6px;
+        background: #30323b;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .progress {
+        height: 100%;
+        width: 100%;
+        background: var(--accent);
+        transition: width 0.2s linear;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: #33232a;
+        color: #f2bd20;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .question-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .question-number {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .question {
+        font-size: clamp(25px, 4vw, 38px);
+        line-height: 1.18;
+        letter-spacing: -0.04em;
+        margin: 0 0 22px;
+        min-height: 90px;
+      }
+      .answer-box {
+        background: #141216;
+        border: 1px solid #493039;
+        padding: 14px 16px;
+        border-radius: 13px;
+        margin-bottom: 24px;
+      }
+      .answer-label {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-weight: 800;
+        margin-bottom: 5px;
+      }
+      .answer {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .btn {
+        border-radius: 12px;
+        padding: 15px 16px;
+        font-weight: 850;
+      }
+      .btn-correct {
+        color: #071c13;
+        background: var(--green);
+      }
+      .btn-wrong {
+        color: #fff;
+        background: #a93240;
+      }
+      .btn-primary {
+        color: #17120b;
+        background: var(--accent);
+      }
+      .btn-secondary {
+        color: var(--text);
+        background: var(--panel-2);
+        border: 1px solid var(--border);
+      }
+      .btn-quiet {
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--border);
+      }
+      .bottom-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .bottom-controls .btn {
+        flex: 1;
+        min-width: 130px;
+        padding: 11px 12px;
+        font-size: 13px;
+      }
+      .score-strip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+        border-top: 1px solid var(--border);
+        padding-top: 20px;
+      }
+      .score-label {
+        color: var(--muted);
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+      .score {
+        font-size: 32px;
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      .side-card {
+        margin-bottom: 18px;
+      }
+      .side-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px 14px;
+      }
+      .side-head h2 {
+        font-size: 15px;
+        margin: 0;
+      }
+      .side-head span {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .leaderboard {
+        padding: 0 12px 12px;
+      }
+      .leader-row {
+        display: grid;
+        grid-template-columns: 30px minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 9px;
+        border-top: 1px solid #2c2e37;
+      }
+      .rank {
+        width: 27px;
+        height: 27px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: #2a2c35;
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--muted);
+      }
+      .leader-row:nth-child(1) .rank {
+        background: #f5c451;
+        color: #261b00;
+      }
+      .leader-row:nth-child(2) .rank {
+        background: #c6ccd8;
+        color: #171923;
+      }
+      .leader-row:nth-child(3) .rank {
+        background: #c98b62;
+        color: #211208;
+      }
+      .leader-name {
+        font-size: 13px;
+        font-weight: 750;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .leader-score {
+        font-size: 13px;
+        font-weight: 900;
+      }
+      .empty {
+        color: var(--muted);
+        font-size: 13px;
+        padding: 20px 10px 24px;
+        text-align: center;
+        line-height: 1.5;
+      }
+      .side-actions {
+        padding: 0 16px 16px;
+        display: flex;
+        gap: 8px;
+      }
+      .side-actions .btn {
+        flex: 1;
+        font-size: 11px;
+        padding: 10px 8px;
+      }
+      .screen {
+        display: none;
+      }
+      .screen.active {
+        display: block;
+      }
+      .center-screen {
+        text-align: center;
+        padding: clamp(30px, 7vw, 70px) 24px;
+      }
+      .big-icon {
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+        margin: 0 auto 22px;
+        display: grid;
+        place-items: center;
+        background: #34202a;
+        color: var(--accent);
+        font-size: 34px;
+        font-weight: 900;
+        border: 1px solid #75402d;
+      }
+      .center-screen h2 {
+        font-size: clamp(30px, 5vw, 44px);
+        margin: 0 0 12px;
+        letter-spacing: -0.05em;
+      }
+      .center-screen p {
+        color: var(--muted);
+        line-height: 1.65;
+        max-width: 480px;
+        margin: 0 auto 26px;
+      }
+      .center-screen .btn {
+        min-width: 190px;
+      }
+      .name-form {
+        max-width: 420px;
+        margin: 26px auto 0;
+        display: flex;
+        gap: 10px;
+      }
+      input {
+        min-width: 0;
+        flex: 1;
+        color: var(--text);
+        background: #141216;
+        border: 1px solid #493039;
+        border-radius: 12px;
+        padding: 14px 15px;
+        outline: none;
+      }
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px #f6800625;
+      }
+      .final-score {
+        font-size: clamp(58px, 10vw, 86px);
+        font-weight: 950;
+        color: var(--accent);
+        line-height: 1;
+        letter-spacing: -0.07em;
+        margin: 20px 0 8px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #f5f6fa;
+        color: #17181d;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 800;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.2s ease;
+        box-shadow: 0 10px 35px #0005;
+        z-index: 5;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .footer-note {
+        color: #747885;
+        font-size: 11px;
+        text-align: center;
+        margin-top: 20px;
+        line-height: 1.5;
+      }
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .side-column {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+        header {
+          margin-bottom: 18px;
+        }
+      }
+      @media (max-width: 480px) {
+        .app {
+          padding: 18px 12px 30px;
+        }
+        .header-badge {
+          display: none;
+        }
+        .card {
+          border-radius: 17px;
+        }
+        .name-form {
+          flex-direction: column;
+        }
+        .controls {
+          gap: 8px;
+        }
+        .btn {
+          padding: 14px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="brand">
+          <div class="brand-mark">?</div>
+          <div>
+            <div class="eyebrow">A Diwali trivia celebration</div>
+            <h1>Dishoom</h1>
+          </div>
+        </div>
+        <div class="header-badge">2-minute challenge · Fixed question order</div>
+      </header>
+
+      <div class="layout">
+        <main class="card">
+          <section id="startScreen" class="screen active">
+            <div class="center-screen">
+              <div class="big-icon">?</div>
+              <div class="eyebrow">This Diwali, how brightly will you shine?</div>
+              <h2>Dishoom.<br />Light up the leaderboard.</h2>
+              <p>Two minutes on the clock. The game master reads each question aloud and marks the answer. Every correct answer earns one point.</p>
+              <div class="footer-note" style="margin-top: 10px; margin-bottom: 10px">by Balls By Picasso</div>
+              <button id="startBtn" class="btn btn-primary">START GAME →</button>
+              <div class="footer-note">Questions and scores use editable text files. Connect the files below before playing.</div>
+            </div>
+          </section>
+
+          <section id="gameScreen" class="screen">
+            <div class="card-inner">
+              <div class="timer-row">
+                <div>
+                  <div class="timer-label">Time remaining</div>
+                  <div id="timer" class="timer">02:00</div>
+                </div>
+                <div style="text-align: right">
+                  <div class="timer-label">Current score</div>
+                  <div id="miniScore" class="score">0</div>
+                </div>
+              </div>
+              <div class="progress-wrap"><div id="timerProgress" class="progress"></div></div>
+              <div class="controls">
+                <button id="wrongBtn" class="btn btn-wrong">✕ &nbsp; WRONG · +0</button>
+                <button id="correctBtn" class="btn btn-correct">✓ &nbsp; CORRECT · +1</button>
+              </div>
+              <div class="bottom-controls">
+                <button id="undoBtn" class="btn btn-quiet" disabled>↶ Undo last mark</button>
+                <button id="skipBtn" class="btn btn-secondary">Skip question →</button>
+                <button id="endBtn" class="btn btn-quiet">End round</button>
+              </div>
+              <div style="height: 26px"></div>
+              <div class="question-meta">
+                <span id="questionNumber" class="question-number">QUESTION 01 / 12</span>
+              </div>
+              <h2 id="questionText" class="question">Question text goes here</h2>
+              <div class="answer-box">
+                <div class="answer-label">Correct answer · Game master only</div>
+                <div id="answerText" class="answer">Answer</div>
+              </div>
+              <div class="score-strip">
+                <div>
+                  <div class="score-label">Questions answered</div>
+                  <div id="answeredCount" style="font-weight: 800; margin-top: 5px">0</div>
+                </div>
+                <div style="text-align: right">
+                  <div class="score-label">Correct</div>
+                  <div id="correctCount" style="font-weight: 800; margin-top: 5px">0</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="resultScreen" class="screen">
+            <div class="center-screen">
+              <div class="big-icon">✓</div>
+              <div class="eyebrow">Round complete</div>
+              <h2 id="resultHeading">Time's up!</h2>
+              <div id="finalScore" class="final-score">0</div>
+              <div class="muted">points earned</div>
+              <p id="resultDetail" style="margin-top: 16px">Nice run. Add your name to the leaderboard.</p>
+              <form id="nameForm" class="name-form">
+                <input id="playerName" maxlength="24" autocomplete="off" placeholder="Enter player name" aria-label="Player name" required />
+                <input id="playerPhone" type="tel" autocomplete="off" placeholder="Phone number (optional)" aria-label="Phone number (optional)" />
+                <button class="btn btn-primary" type="submit">SAVE SCORE</button>
+              </form>
+            </div>
+          </section>
+
+          <section id="savedScreen" class="screen">
+            <div class="center-screen">
+              <div class="big-icon">★</div>
+              <div class="eyebrow">Score saved</div>
+              <h2>Well played.</h2>
+              <p id="savedMessage">Your score has been added to the leaderboard.</p>
+              <button id="playAgainBtn" class="btn btn-primary">NEXT PLAYER →</button>
+            </div>
+          </section>
+        </main>
+
+        <aside class="side-column">
+          <div class="card side-card">
+            <div class="side-head">
+              <h2>Leaderboard</h2>
+              <span id="leaderCount">0 players</span>
+            </div>
+            <div id="leaderboard" class="leaderboard">
+              <div class="empty">No scores yet.<br />Be the first on the board.</div>
+            </div>
+            <div class="side-actions">
+              <button id="exportBtn" class="btn btn-secondary">Export CSV</button>
+              <button id="resetBoardBtn" class="btn btn-quiet">Reset board</button>
+            </div>
+          </div>
+          <div class="card side-card">
+            <div class="side-head">
+              <h2>Offline files</h2>
+              <span>TXT</span>
+            </div>
+            <div style="padding: 0 16px 12px; color: var(--muted); font-size: 12px; line-height: 1.6">
+              Pick your questions file and leaderboard file. The leaderboard text file is rewritten automatically whenever scores change.
+            </div>
+            <div class="side-actions" style="flex-direction: column">
+              <button id="questionsFileBtn" class="btn btn-secondary">Load questions.txt</button>
+              <button id="leaderboardFileBtn" class="btn btn-secondary">Connect leaderboard.txt</button>
+            </div>
+            <div id="fileStatus" style="padding: 0 18px 18px; color: var(--muted); font-size: 11px; line-height: 1.6">No text files connected yet.</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <div id="toast" class="toast" role="status"></div>
+
+    <script>
+      // Fallback questions are used until a questions text file is loaded.
+      const DEFAULT_QUESTIONS = [
+        { question: "What is the capital of France?", answer: "Paris", difficulty: "Very easy" },
+        { question: "How many sides does a hexagon have?", answer: "Six", difficulty: "Very easy" },
+        { question: "Which planet is known as the Red Planet?", answer: "Mars", difficulty: "Easy" },
+        { question: "What is the chemical symbol for gold?", answer: "Au", difficulty: "Easy" },
+        { question: "How many players from one team are on the field in a standard football (soccer) match?", answer: "Eleven", difficulty: "Easy" },
+        { question: "What is the largest ocean on Earth?", answer: "The Pacific Ocean", difficulty: "Medium" },
+        { question: "Which element has the chemical symbol Ag?", answer: "Silver", difficulty: "Medium" },
+        { question: "What is the square root of 169?", answer: "13", difficulty: "Medium" },
+        { question: "Which scientist formulated the three laws of motion?", answer: "Isaac Newton", difficulty: "Hard" },
+        { question: "What is the atomic number of tungsten?", answer: "74", difficulty: "Hard" },
+        { question: "Which blood vessels carry blood away from the heart?", answer: "Arteries", difficulty: "Hard" },
+        { question: "What is the smallest bone in the human body?", answer: "The stapes", difficulty: "Very hard" },
+      ];
+      let QUESTIONS = [...DEFAULT_QUESTIONS];
+      let questionsFileName = "";
+      let leaderboardFileName = "";
+      let questionsFileHandle = null;
+      let leaderboardFileHandle = null;
+      let fileWriteQueue = Promise.resolve();
+
+      const ROUND_SECONDS = 120;
+      const STORAGE_KEY = "triviaTimeLeaderboard_v1";
+      let currentIndex = 0;
+      let score = 0;
+      let answered = 0;
+      let correct = 0;
+      let roundHistory = [];
+      let remaining = ROUND_SECONDS;
+      let timerInterval = null;
+      let roundActive = false;
+      let lastRound = null;
+      let toastTimeout = null;
+
+      const $ = (id) => document.getElementById(id);
+      const screens = ["startScreen", "gameScreen", "resultScreen", "savedScreen"];
+
+      function showScreen(id) {
+        screens.forEach((screenId) => $(screenId).classList.toggle("active", screenId === id));
+      }
+
+      function loadLeaderboard() {
+        try {
+          const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          return Array.isArray(data) ? data : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function leaderboardToText(entries) {
+        const header = [
+          "# DIWALI QUIZ LEADERBOARD",
+          "# Format: Name | Score | Phone (optional) | Date",
+          "# Keep one player score per line. Lines beginning with # are comments.",
+          "",
+        ];
+        const lines = [...entries]
+          .sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0) || String(a.name || "").localeCompare(String(b.name || "")))
+          .map((e) =>
+            [String(e.name || "").replace(/[|\r\n]/g, " "), Number(e.score) || 0, String(e.phone || "").replace(/[|\r\n]/g, " "), String(e.date || "")].join(
+              " | ",
+            ),
+          );
+        return [...header, ...lines, ""].join("\n");
+      }
+
+      function parseLeaderboardText(text) {
+        const entries = [];
+        for (const rawLine of text.split(/\r?\n/)) {
+          const line = rawLine.trim();
+          if (!line || line.startsWith("#")) continue;
+          const parts = line.split("|").map((part) => part.trim());
+          if (parts.length < 2) continue;
+          const score = Number(parts[1]);
+          if (!parts[0] || !Number.isFinite(score)) continue;
+          entries.push({
+            name: parts[0],
+            score,
+            correct: Number(parts[1]) || 0,
+            answered: Number(parts[1]) || 0,
+            phone: parts.length >= 4 ? parts[2] : "",
+            date: parts.length >= 4 ? parts.slice(3).join(" | ") : parts.slice(2).join(" | ") || "",
+          });
+        }
+        return entries;
+      }
+
+      async function writeLeaderboardFile(entries) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        if (leaderboardFileHandle) {
+          fileWriteQueue = fileWriteQueue.then(async () => {
+            const writable = await leaderboardFileHandle.createWritable();
+            await writable.write(leaderboardToText(entries));
+            await writable.close();
+          });
+          try {
+            await fileWriteQueue;
+            setFileStatus("Leaderboard auto-saved to " + leaderboardFileName + ".");
+          } catch (err) {
+            setFileStatus("Could not write leaderboard file. Reconnect it to grant permission.");
+            console.error(err);
+            showToast("File save failed — reconnect leaderboard.txt");
+          }
+        }
+        renderLeaderboard();
+      }
+
+      function saveLeaderboard(entries) {
+        return writeLeaderboardFile(entries);
+      }
+
+      function renderLeaderboard() {
+        const entries = loadLeaderboard().sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+        $("leaderCount").textContent = `${entries.length} ${entries.length === 1 ? "player" : "entries"}`;
+        const board = $("leaderboard");
+        if (!entries.length) {
+          board.innerHTML = '<div class="empty">No scores yet.<br>Be the first on the board.</div>';
+          return;
+        }
+        board.innerHTML = entries
+          .slice(0, 10)
+          .map(
+            (entry, index) => `
+        <div class="leader-row">
+          <div class="rank">${index + 1}</div>
+          <div class="leader-name" title="${escapeHtml(entry.name)}">${escapeHtml(entry.name)}</div>
+          <div class="leader-score">${entry.score} pt${entry.score === 1 ? "" : "s"}</div>
+        </div>`,
+          )
+          .join("");
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(
+          /[&<>"']/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[char],
+        );
+      }
+
+      function startGame() {
+        if (!QUESTIONS.length) {
+          showToast("Load a questions file first");
+          return;
+        }
+        clearInterval(timerInterval);
+        currentIndex = 0;
+        score = 0;
+        answered = 0;
+        correct = 0;
+        roundHistory = [];
+        remaining = ROUND_SECONDS;
+        roundActive = true;
+        showScreen("gameScreen");
+        renderQuestion();
+        updateStats();
+        updateTimer();
+        timerInterval = setInterval(() => {
+          if (!roundActive) return;
+          remaining = Math.max(0, remaining - 1);
+          updateTimer();
+          if (remaining <= 0) finishRound("Time's up!");
+        }, 1000);
+      }
+
+      function renderQuestion() {
+        if (currentIndex >= QUESTIONS.length) {
+          $("questionNumber").textContent = "ALL QUESTIONS COMPLETE";
+          $("questionText").textContent = "You've reached the end of the question list.";
+          $("answerText").textContent = "No more questions";
+          $("correctBtn").disabled = true;
+          $("wrongBtn").disabled = true;
+          $("skipBtn").disabled = true;
+          return;
+        }
+        const q = QUESTIONS[currentIndex];
+        $("questionNumber").textContent = `QUESTION ${String(currentIndex + 1).padStart(2, "0")} / ${QUESTIONS.length}`;
+        $("questionText").textContent = q.question;
+        $("answerText").textContent = q.answer;
+        $("correctBtn").disabled = false;
+        $("wrongBtn").disabled = false;
+        $("skipBtn").disabled = false;
+      }
+
+      function updateStats() {
+        $("miniScore").textContent = score;
+        $("answeredCount").textContent = answered;
+        $("correctCount").textContent = correct;
+        $("undoBtn").disabled = roundHistory.length === 0 || !roundActive;
+      }
+
+      function updateTimer() {
+        const mins = Math.floor(remaining / 60)
+          .toString()
+          .padStart(2, "0");
+        const secs = (remaining % 60).toString().padStart(2, "0");
+        $("timer").textContent = `${mins}:${secs}`;
+        $("timer").classList.toggle("warning", remaining <= 15);
+        $("timerProgress").style.width = `${(remaining / ROUND_SECONDS) * 100}%`;
+        $("timerProgress").style.background = remaining <= 15 ? "var(--red)" : "var(--accent)";
+      }
+
+      function recordAnswer(isCorrect) {
+        if (!roundActive || currentIndex >= QUESTIONS.length) return;
+        roundHistory.push({ currentIndex, score, answered, correct });
+        answered++;
+        if (isCorrect) {
+          score++;
+          correct++;
+        }
+        currentIndex++;
+        updateStats();
+        renderQuestion();
+      }
+
+      function skipQuestion() {
+        if (!roundActive || currentIndex >= QUESTIONS.length) return;
+        roundHistory.push({ currentIndex, score, answered, correct });
+        currentIndex++;
+        renderQuestion();
+        updateStats();
+      }
+
+      function undoLast() {
+        if (!roundActive || !roundHistory.length) return;
+        const previous = roundHistory.pop();
+        currentIndex = previous.currentIndex;
+        score = previous.score;
+        answered = previous.answered;
+        correct = previous.correct;
+        renderQuestion();
+        updateStats();
+        showToast("Last action undone");
+      }
+
+      function finishRound(reason) {
+        if (!roundActive) return;
+        roundActive = false;
+        clearInterval(timerInterval);
+        $("resultHeading").textContent = reason;
+        $("finalScore").textContent = score;
+        $("resultDetail").textContent = `You got ${correct} correct out of ${answered} answered. Enter a name to save this score.`;
+        $("playerName").value = "";
+        $("correctBtn").disabled = true;
+        $("wrongBtn").disabled = true;
+        $("skipBtn").disabled = true;
+        $("undoBtn").disabled = true;
+        lastRound = { score, correct, answered };
+        showScreen("resultScreen");
+        setTimeout(() => $("playerName").focus(), 100);
+      }
+
+      function submitScore(event) {
+        event.preventDefault();
+        const name = $("playerName").value.trim();
+        const phone = $("playerPhone").value.trim();
+        if (!name) {
+          showToast("Enter a name to save the score");
+          $("playerName").focus();
+          return;
+        }
+        const entries = loadLeaderboard();
+        entries.push({
+          name,
+          phone,
+          score: lastRound ? lastRound.score : score,
+          correct: lastRound ? lastRound.correct : correct,
+          answered: lastRound ? lastRound.answered : answered,
+          date: new Date().toISOString(),
+        });
+        saveLeaderboard(entries).then(() => {
+          $("savedMessage").textContent =
+            `${name}, your score of ${lastRound.score} point${lastRound.score === 1 ? "" : "s"} has been added to the leaderboard.`;
+          showScreen("savedScreen");
+        });
+      }
+
+      function resetLeaderboard() {
+        const entries = loadLeaderboard();
+        if (!entries.length) {
+          showToast("The leaderboard is already empty");
+          return;
+        }
+        if (confirm("Clear the entire leaderboard? This cannot be undone.")) {
+          saveLeaderboard([]).then(() => showToast("Leaderboard cleared"));
+        }
+      }
+
+      function exportCSV() {
+        const entries = loadLeaderboard().sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+        if (!entries.length) {
+          showToast("No scores to export yet");
+          return;
+        }
+        const rows = [["Rank", "Name", "Score", "Correct", "Answered", "Date"]];
+        entries.forEach((e, i) => rows.push([i + 1, e.name, e.score, e.correct ?? "", e.answered ?? "", e.date ?? ""]));
+        const csv = rows.map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "trivia-leaderboard.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("Leaderboard exported");
+      }
+
+      function setFileStatus(message) {
+        $("fileStatus").textContent = message;
+      }
+
+      function parseQuestionsText(text) {
+        const parsed = [];
+        const errors = [];
+        text.split(/\r?\n/).forEach((rawLine, index) => {
+          const line = rawLine.trim();
+          if (!line || line.startsWith("#")) return;
+          const parts = line.split("|").map((part) => part.trim());
+          if (parts.length < 2 || !parts[0] || !parts.slice(1).join(" | ")) {
+            errors.push(index + 1);
+            return;
+          }
+          parsed.push({
+            question: parts[0],
+            answer: parts.slice(1).join(" | "),
+          });
+        });
+        if (!parsed.length) throw new Error("No valid questions found. Use: Question | Answer");
+        if (errors.length) throw new Error("Could not read line(s): " + errors.join(", ") + ". Use: Question | Answer");
+        return parsed;
+      }
+
+      async function loadQuestionsFile() {
+        if (!("showOpenFilePicker" in window)) {
+          showToast("Use a recent Chrome or Edge browser to load text files");
+          return;
+        }
+        try {
+          const [handle] = await window.showOpenFilePicker({
+            multiple: false,
+            types: [{ description: "Text files", accept: { "text/plain": [".txt"] } }],
+          });
+          const file = await handle.getFile();
+          const parsed = parseQuestionsText(await file.text());
+          QUESTIONS = parsed;
+          questionsFileHandle = handle;
+          questionsFileName = file.name;
+          setFileStatus(`Loaded ${questionsFileName} (${QUESTIONS.length} questions).`);
+          showToast(`Loaded ${QUESTIONS.length} questions`);
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            console.error(err);
+            showToast(err.message || "Could not load questions file");
+          }
+        }
+      }
+
+      async function connectLeaderboardFile() {
+        if (!("showSaveFilePicker" in window)) {
+          showToast("Use a recent Chrome or Edge browser to connect the save file");
+          return;
+        }
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: "leaderboard.txt",
+            types: [{ description: "Text files", accept: { "text/plain": [".txt"] } }],
+          });
+          leaderboardFileHandle = handle;
+          leaderboardFileName = handle.name;
+          const file = await handle.getFile();
+          const contents = await file.text();
+          if (contents.trim()) {
+            const imported = parseLeaderboardText(contents);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+          } else {
+            await writeLeaderboardFile(loadLeaderboard());
+          }
+          renderLeaderboard();
+          setFileStatus(`Questions: ${questionsFileName || "using built-in defaults"}. Leaderboard: ${leaderboardFileName} (auto-save connected).`);
+          showToast("Leaderboard text file connected");
+        } catch (err) {
+          if (err.name !== "AbortError") {
+            console.error(err);
+            showToast(err.message || "Could not connect leaderboard file");
+          }
+        }
+      }
+
+      function showToast(message) {
+        $("toast").textContent = message;
+        $("toast").classList.add("show");
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => $("toast").classList.remove("show"), 2200);
+      }
+
+      $("startBtn").addEventListener("click", startGame);
+      $("correctBtn").addEventListener("click", () => recordAnswer(true));
+      $("wrongBtn").addEventListener("click", () => recordAnswer(false));
+      $("skipBtn").addEventListener("click", skipQuestion);
+      $("undoBtn").addEventListener("click", undoLast);
+      $("endBtn").addEventListener("click", () => {
+        if (roundActive && confirm("End this round now? The current score will be kept.")) finishRound("Round ended");
+      });
+      $("nameForm").addEventListener("submit", submitScore);
+      $("playAgainBtn").addEventListener("click", () => showScreen("startScreen"));
+      $("resetBoardBtn").addEventListener("click", resetLeaderboard);
+      $("exportBtn").addEventListener("click", exportCSV);
+      $("questionsFileBtn").addEventListener("click", loadQuestionsFile);
+      $("leaderboardFileBtn").addEventListener("click", connectLeaderboardFile);
+
+      renderLeaderboard();
+      setFileStatus("Choose questions.txt and leaderboard.txt before starting. File permissions may need to be granted again when you reopen the app.");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,3 @@
+# DIWALI QUIZ LEADERBOARD
+# Format: Name | Score | Phone (optional) | Date
+# Keep one player score per line. Lines beginning with # are comments.
